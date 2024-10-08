@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "501644176308",
+    "project_id": "pictionis-67a53",
+    "storage_bucket": "pictionis-67a53.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501644176308:android:d01252ba15a820190de0e1",
+        "android_client_info": {
+          "package_name": "com.pictionis.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvMUbZagt9Pw5qkRrZD4GwurU3UQp4TSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
