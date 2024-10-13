@@ -17,7 +17,7 @@ class DrawingPage extends StatefulWidget {
   const DrawingPage({super.key});
 
   @override
-  _DrawingPageState createState() => _DrawingPageState();
+  State<DrawingPage> createState() => _DrawingPageState();
 }
 
 class _DrawingPageState extends State<DrawingPage> {
