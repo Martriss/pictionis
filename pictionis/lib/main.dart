@@ -44,31 +44,57 @@ class _DrawingPageState extends State<DrawingPage> {
       appBar: AppBar(
         title: const Text("Pictionis"),
       ),
-      body: GestureDetector(
-        onPanUpdate: (details) {
-          setState(() {
-            points.add(details.localPosition);
-          });
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('drawings').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          List<Offset?> pointsFromFirestore = [];
+          for (var doc in snapshot.data!.docs) {
+            var points = doc['points'];
+            pointsFromFirestore.add(Offset(points[0], points[1]));
+            pointsFromFirestore.add(Offset(points[2], points[3]));
+          }
+
+          return GestureDetector(
+            onPanUpdate: (details) {
+              setState(() {
+                points.add(details.localPosition);
+              });
+            },
+            onPanEnd: (details) {
+              if (points.length >= 2) {
+                saveDrawing(points.first!, points.last!);
+              }
+              setState(() {
+                points.add(null);
+              });
+            },
+            child: CustomPaint(
+              painter: ShapePainter(pointsFromFirestore + points),
+              size: Size.infinite,
+            ),
+          );
         },
-        onPanEnd: (details) {
-          setState(() {
-            points.add(null); // Add a break to stop the line on pan end.
-          });
-        },
-        child: CustomPaint(
-          painter: ShapePainter(points),
-          size: Size.infinite,
-        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            points.clear(); // Clear the drawing
+            points.clear();
           });
         },
         child: const Icon(Icons.clear),
       ),
     );
+  }
+
+  void saveDrawing(Offset startPoint, Offset endPoint) async {
+    await FirebaseFirestore.instance.collection('drawings').add({
+      'points': [startPoint.dx, startPoint.dy, endPoint.dx, endPoint.dy],
+      'timestamp': FieldValue.serverTimestamp(),
+    });
   }
 }
 
