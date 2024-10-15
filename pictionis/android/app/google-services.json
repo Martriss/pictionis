@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:501644176308:android:d01252ba15a820190de0e1",
+        "mobilesdk_app_id": "1:501644176308:android:d554a229c60ef9f00de0e1",
         "android_client_info": {
-          "package_name": "com.pictionis.app"
+          "package_name": "com.example.pictionis"
         }
       },
       "oauth_client": [],
@@ -26,9 +26,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:501644176308:android:815500da482e099d0de0e1",
+        "mobilesdk_app_id": "1:501644176308:android:d01252ba15a820190de0e1",
         "android_client_info": {
-          "package_name": "con.pictionis.app"
+          "package_name": "com.pictionis.app"
         }
       },
       "oauth_client": [],
