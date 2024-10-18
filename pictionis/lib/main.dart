@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:pictionis/models/game_state.dart';
 import 'package:pictionis/widget_selector.dart';
 import 'package:provider/provider.dart';
 
@@ -12,11 +12,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => GameState(),
-      child: const Pictionis(),
-    ),
+    Provider(
+        create: (context) => FirebaseFirestore.instance,
+        child: const Pictionis()),
   );
 }
 
