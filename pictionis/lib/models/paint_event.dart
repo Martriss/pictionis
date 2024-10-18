@@ -12,7 +12,7 @@ class PaintEvent {
   factory PaintEvent.fromJson(Map<String, dynamic> json) {
     List<Offset?> offsets = (json['offsets'] as List).map((item) {
       if (item == null) return null;
-      return Offset(item[0], item[1]);
+      return Offset(item['x'], item['y']);
     }).toList();
 
     Paint paint = Paint()
@@ -27,7 +27,10 @@ class PaintEvent {
   }
 
   Map<String, dynamic> toJson() => {
-        'offsets': offsets,
+        'offsets': offsets
+            .map((offset) =>
+                offset != null ? {'x': offset.dx, 'y': offset.dy} : null)
+            .toList(),
         'color': paint.color.value,
         'width': paint.strokeWidth,
       };
