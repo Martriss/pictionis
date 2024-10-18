@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pictionis/models/game_state.dart';
+import 'package:pictionis/models/drawing_state.dart';
 import 'package:provider/provider.dart';
 
 class DrawController extends StatefulWidget {
@@ -22,8 +22,7 @@ class _DrawControllerState extends State<DrawController> {
         // context.read<GameState>().addPaintEvent(points);
       },
       onPanEnd: (details) {
-        points.add(null);
-        context.read<GameState>().addPaintEvent(points);
+        context.read<DrawingState>().addLocalPaintEvent(points);
         points.clear();
       },
       child: widget.child,

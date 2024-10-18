@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pictionis/models/game_state.dart';
+import 'package:pictionis/models/drawing_state.dart';
 import 'package:pictionis/models/paint_event.dart';
 import 'package:provider/provider.dart';
 
@@ -8,12 +8,14 @@ class DrawCanvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(builder: (context, state, _) {
-      return CustomPaint(
-        painter: Painter(state.events),
-        size: Size.infinite,
-      );
-    });
+    return StreamBuilder<void>(
+        stream: context.read<DrawingState>().allChanges,
+        builder: (context, snapshot) {
+          return CustomPaint(
+            painter: Painter(context.read<DrawingState>().events),
+            size: Size.infinite,
+          );
+        });
   }
 }
 
