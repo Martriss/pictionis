@@ -1,8 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pictionis/models/game_state.dart';
 import 'package:pictionis/widget_selector.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
@@ -13,7 +13,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    const Pictionis(),
+    ChangeNotifierProvider(
+      create: (context) => GameState(),
+      child: const Pictionis(),
+    ),
   );
 }
 
