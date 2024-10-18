@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pictionis/widgets/draw_canvas.dart';
+import 'package:pictionis/models/paint_event.dart';
 
 class GameState extends ChangeNotifier {
   final List<PaintEvent> events = [];

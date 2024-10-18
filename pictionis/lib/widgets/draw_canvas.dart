@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pictionis/models/game_state.dart';
+import 'package:pictionis/models/paint_event.dart';
 import 'package:provider/provider.dart';
 
 class DrawCanvas extends StatelessWidget {
@@ -23,7 +24,6 @@ class Painter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // log(events.toString());
     for (var event in events) {
       for (int i = 0; i < event.offsets.length - 1; i++) {
         if (event.offsets[i] != null && event.offsets[i + 1] != null) {
@@ -38,14 +38,4 @@ class Painter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
-}
-
-class PaintEvent {
-  final List<Offset?> offsets;
-  final Paint paint;
-
-  PaintEvent({
-    required this.offsets,
-    required this.paint,
-  });
 }
