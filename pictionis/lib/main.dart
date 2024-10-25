@@ -1,8 +1,8 @@
-import 'dart:developer';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pictionis/widget_selector.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
@@ -12,8 +12,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
-    const Pictionis(),
+    Provider(
+        create: (context) => FirebaseFirestore.instance,
+        child: const Pictionis()),
   );
 }
 
