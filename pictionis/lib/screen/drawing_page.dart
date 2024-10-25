@@ -6,6 +6,7 @@ import 'package:pictionis/firebase_draw_controller.dart';
 import 'package:pictionis/models/drawing_state.dart';
 import 'package:pictionis/widgets/draw_canvas.dart';
 import 'package:pictionis/widgets/draw_controller.dart';
+import 'package:pictionis/widgets/tool_selector.dart';
 import 'package:provider/provider.dart';
 
 class DrawingPage extends StatefulWidget {
@@ -51,12 +52,7 @@ class _DrawingPageState extends State<DrawingPage> {
         body: const DrawController(
           child: DrawCanvas(),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _drawingState.clearPaintEvents();
-          },
-          child: const Icon(Icons.clear),
-        ),
+        floatingActionButton: ToolSelector(),
       ),
     );
   }
