@@ -31,7 +31,13 @@ class DrawingState {
 
   void addLocalPaintEvent(List<Offset?> offsets) {
     // Need to reconstruct offsets otherwise its keep by ref and all events share the same offsets
-    events.add(PaintEvent(offsets: [...offsets], paint: currentPaint));
+    events.add(PaintEvent(
+      offsets: [...offsets],
+      paint: Paint()
+        ..color = currentPaint.color
+        ..strokeCap = currentPaint.strokeCap
+        ..strokeWidth = currentPaint.strokeWidth,
+    ));
     _localChanges.add(null);
   }
 
