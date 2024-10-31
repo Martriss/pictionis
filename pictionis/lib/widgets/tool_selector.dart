@@ -1,15 +1,115 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:pictionis/models/drawing_state.dart';
 
 class ToolSelector extends StatelessWidget {
-  const ToolSelector({
+  ToolSelector({
     super.key,
-  });
+    required DrawingState drawingState,
+  }) : _drawingState = drawingState;
+
+  final _key = GlobalKey<ExpandableFabState>();
+  final DrawingState _drawingState;
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {},
-      child: const Icon(Icons.clear),
+    return ExpandableFab(
+      key: _key,
+      openCloseStackAlignment: Alignment.bottomLeft,
+      pos: ExpandableFabPos.right,
+      type: ExpandableFabType.up,
+      distance: 60.0,
+      overlayStyle: ExpandableFabOverlayStyle(
+        color: Colors.white.withOpacity(0.9),
+      ),
+      children: [
+        FloatingActionButton.small(
+          child: const Icon(Icons.line_weight),
+          onPressed: () async {
+            double? widthValue = await showDialog<double>(
+                context: context,
+                builder: (BuildContext context) => StrokeWidthDialog(
+                      curValue: _drawingState.currentPaint.strokeWidth,
+                    ));
+            _drawingState.currentPaint.strokeWidth =
+                widthValue ?? _drawingState.currentPaint.strokeWidth;
+            _key.currentState?.toggle();
+          },
+        ),
+        FloatingActionButton.small(
+          onPressed: () async {
+            await showDialog<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: BlockPicker(
+                    pickerColor: _drawingState.currentPaint.color,
+                    onColorChanged: (color) {
+                      _drawingState.currentPaint.color = color;
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                );
+              },
+            );
+            _key.currentState?.toggle();
+          },
+          child: const Icon(Icons.palette),
+        ),
+        FloatingActionButton.small(
+          onPressed: () {},
+          child: const Icon(Icons.shape_line_outlined),
+        ),
+        FloatingActionButton.small(
+          onPressed: () {},
+          child: const Icon(Icons.undo),
+        ),
+        FloatingActionButton.small(
+          onPressed: () {},
+          child: const Icon(Icons.restart_alt),
+        )
+      ],
+    );
+  }
+}
+
+class StrokeWidthDialog extends StatefulWidget {
+  const StrokeWidthDialog({
+    super.key,
+    required this.curValue,
+  });
+
+  final double curValue;
+
+  @override
+  State<StrokeWidthDialog> createState() => _StrokeWidthDialogState();
+}
+
+class _StrokeWidthDialogState extends State<StrokeWidthDialog> {
+  double? _currentSliderValue;
+
+  @override
+  Widget build(BuildContext context) {
+    final value = _currentSliderValue ?? widget.curValue;
+    return AlertDialog(
+      alignment: Alignment.bottomLeft,
+      content: SizedBox(
+        height: 20,
+        child: Slider(
+          value: value,
+          min: 4,
+          max: 32,
+          divisions: 7,
+          label: value.round().toString(),
+          onChanged: (double value) {
+            setState(() {
+              _currentSliderValue = value;
+            });
+          },
+          onChangeEnd: (value) => Navigator.of(context).pop(value),
+        ),
+      ),
     );
   }
 }
