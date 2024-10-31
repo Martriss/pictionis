@@ -3,9 +3,10 @@ import 'package:async/async.dart';
 
 import 'package:flutter/material.dart';
 import 'package:pictionis/models/paint_event.dart';
+import 'package:pictionis/service/auth_service.dart';
 
 class DrawingState {
-  final List<PaintEvent> events = [];
+  final Map<String, PaintEvent> events = {};
   final Paint currentPaint = Paint()
     ..color = Colors.black
     ..strokeCap = StrokeCap.round
@@ -17,7 +18,7 @@ class DrawingState {
   final StreamController<void> _remoteChanges =
       StreamController<void>.broadcast();
 
-  /// A [Stream] that fires an event every time any change to this area is made.
+  /// A [Stream] that fires an event every time any change is made.
   Stream<void> get allChanges =>
       StreamGroup.mergeBroadcast([remoteChanges, localChanges]);
 
@@ -31,7 +32,13 @@ class DrawingState {
 
   void addLocalPaintEvent(List<Offset?> offsets) {
     // Need to reconstruct offsets otherwise its keep by ref and all events share the same offsets
-    events.add(PaintEvent(
+
+    var timestamp = DateTime.now().millisecondsSinceEpoch;
+    var user = Auth().currentUser!.uid;
+    final key = '$timestamp-$user';
+    events[key] = (PaintEvent(
+      user: user,
+      timestamp: timestamp,
       offsets: [...offsets],
       paint: Paint()
         ..color = currentPaint.color
@@ -42,7 +49,8 @@ class DrawingState {
   }
 
   void addFirebasePaintEvent(PaintEvent event) {
-    events.add(event);
+    final key = '${event.timestamp}-${event.user}';
+    events[key] = (event);
     _remoteChanges.add(null);
   }
 

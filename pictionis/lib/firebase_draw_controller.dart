@@ -27,9 +27,21 @@ class FirebaseDrawController {
     _roomFirestoreSubscription = _drawEventsRef.snapshots().listen((snapshot) {
       if (snapshot.docChanges.isNotEmpty) {
         for (var docChange in snapshot.docChanges) {
-          final data = docChange.doc.data();
-          if (data != null) {
-            drawingState.addFirebasePaintEvent(PaintEvent.fromJson(data));
+          switch (docChange.type) {
+            case DocumentChangeType.added:
+              final data = docChange.doc.data();
+              if (data != null) {
+                final event = PaintEvent.fromJson(data);
+                drawingState.addFirebasePaintEvent(event);
+              }
+              break;
+            case DocumentChangeType.removed:
+              log('message');
+              // TODO: add removeEvent from gamestate
+              break;
+            case DocumentChangeType.modified:
+              // Should not happen
+              break;
           }
         }
       }
@@ -38,8 +50,7 @@ class FirebaseDrawController {
 //TODO: Add user id to event
     _roomLocalSubscription = drawingState.localChanges.listen((_) {
       if (drawingState.events.isNotEmpty) {
-        final lastEvent = drawingState.events.last.toJson();
-        lastEvent['timestamp'] = FieldValue.serverTimestamp();
+        final lastEvent = drawingState.events.entries.last.value.toJson();
         _drawEventsRef.add(lastEvent);
       }
     });

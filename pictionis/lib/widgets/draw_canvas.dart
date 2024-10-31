@@ -12,7 +12,8 @@ class DrawCanvas extends StatelessWidget {
         stream: context.read<DrawingState>().allChanges,
         builder: (context, snapshot) {
           return CustomPaint(
-            painter: Painter(context.read<DrawingState>().events),
+            painter:
+                Painter(context.read<DrawingState>().events.values.toList()),
             size: Size.infinite,
           );
         });
