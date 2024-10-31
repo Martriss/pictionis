@@ -7,7 +7,8 @@ import 'package:pictionis/service/auth_service.dart';
 
 class DrawingState {
   final Map<String, PaintEvent> _events = {};
-  final Paint currentPaint = Paint()
+  PaintEvent? currentlyDrawingPaintEvent;
+  final Paint selectedPaint = Paint()
     ..color = Colors.black
     ..strokeCap = StrokeCap.round
     ..strokeWidth = 4.0;
@@ -30,24 +31,36 @@ class DrawingState {
 
   void addLocalPaintEvent(List<Offset?> offsets) {
     // Need to reconstruct offsets otherwise its keep by ref and all events share the same offsets
-    var timestamp = DateTime.now().millisecondsSinceEpoch;
-    var user = Auth().currentUser!.uid;
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final user = Auth().currentUser!.uid;
     final key = '$timestamp-$user';
     _events[key] = (PaintEvent(
       user: user,
       timestamp: timestamp,
       offsets: [...offsets],
       paint: Paint()
-        ..color = currentPaint.color
-        ..strokeCap = currentPaint.strokeCap
-        ..strokeWidth = currentPaint.strokeWidth,
+        ..color = selectedPaint.color
+        ..strokeCap = selectedPaint.strokeCap
+        ..strokeWidth = selectedPaint.strokeWidth,
     ));
     _add.add(null);
+    currentlyDrawingPaintEvent = null;
   }
 
   void addFirebasePaintEvent(PaintEvent event) {
     final key = '${event.timestamp}-${event.user}';
     _events[key] = (event);
+    _remote.add(null);
+  }
+
+  void updateCurrentlyDrawingPaintEvent(List<Offset?> offsets) {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final user = Auth().currentUser!.uid;
+    currentlyDrawingPaintEvent = PaintEvent(
+        user: user,
+        timestamp: timestamp,
+        offsets: [...offsets],
+        paint: selectedPaint);
     _remote.add(null);
   }
 
