@@ -24,7 +24,8 @@ class FirebaseDrawController {
       {required this.instance,
       required this.drawingState,
       required this.roomID}) {
-    _roomFirestoreSubscription = _drawEventsRef.snapshots().listen((snapshot) {
+    _roomFirestoreSubscription =
+        _drawEventsRef.orderBy("timestamp").snapshots().listen((snapshot) {
       if (snapshot.docChanges.isNotEmpty) {
         for (var docChange in snapshot.docChanges) {
           switch (docChange.type) {
