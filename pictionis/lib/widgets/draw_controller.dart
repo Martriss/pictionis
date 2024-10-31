@@ -19,7 +19,7 @@ class _DrawControllerState extends State<DrawController> {
     return GestureDetector(
       onPanUpdate: (details) {
         points.add(details.localPosition);
-        // context.read<GameState>().addPaintEvent(points);
+        context.read<DrawingState>().updateCurrentlyDrawingPaintEvent(points);
       },
       onPanEnd: (details) {
         context.read<DrawingState>().addLocalPaintEvent(points);
