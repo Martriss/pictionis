@@ -19,6 +19,7 @@ class FirebaseDrawController {
   StreamSubscription? _roomFirestoreSubscription;
 
   StreamSubscription? _roomLocalSubscription;
+  StreamSubscription? _clearSubscription;
 
   FirebaseDrawController(
       {required this.instance,
@@ -28,38 +29,45 @@ class FirebaseDrawController {
         _drawEventsRef.orderBy("timestamp").snapshots().listen((snapshot) {
       if (snapshot.docChanges.isNotEmpty) {
         for (var docChange in snapshot.docChanges) {
-          switch (docChange.type) {
-            case DocumentChangeType.added:
-              final data = docChange.doc.data();
-              if (data != null) {
-                final event = PaintEvent.fromJson(data);
+          final data = docChange.doc.data();
+          if (data != null) {
+            final event = PaintEvent.fromJson(data);
+            switch (docChange.type) {
+              case DocumentChangeType.added:
                 drawingState.addFirebasePaintEvent(event);
-              }
-              break;
-            case DocumentChangeType.removed:
-              log('message');
-              // TODO: add removeEvent from gamestate
-              break;
-            case DocumentChangeType.modified:
-              // Should not happen
-              break;
+                break;
+              case DocumentChangeType.removed:
+                drawingState.removeFirebaseEvent(event);
+                break;
+              case DocumentChangeType.modified:
+                // Should not happen
+                break;
+            }
           }
         }
       }
     });
 
-//TODO: Add user id to event
-    _roomLocalSubscription = drawingState.localChanges.listen((_) {
+    _roomLocalSubscription = drawingState.add.listen((_) {
       if (drawingState.events.isNotEmpty) {
         final lastEvent = drawingState.events.entries.last.value.toJson();
         _drawEventsRef.add(lastEvent);
       }
+    });
+
+    _clearSubscription = drawingState.clear.listen((_) {
+      _drawEventsRef.get().then((snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs) {
+          ds.reference.delete();
+        }
+      });
     });
   }
 
   void dispose() {
     _roomFirestoreSubscription?.cancel();
     _roomLocalSubscription?.cancel();
+    _clearSubscription?.cancel();
   }
 }
 
