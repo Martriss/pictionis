@@ -62,10 +62,17 @@ class ToolSelector extends StatelessWidget {
           onPressed: null,
           child: Icon(Icons.shape_line_outlined),
         ),
+        FloatingActionButton.small(
+          onPressed: () {
+            _drawingState.removeLastEvent();
+            _key.currentState?.toggle();
+          },
+          child: const Icon(Icons.undo),
+        ),
         const FloatingActionButton.small(
           backgroundColor: Colors.grey,
           onPressed: null,
-          child: Icon(Icons.undo),
+          child: Icon(Icons.redo),
         ),
         FloatingActionButton.small(
           onPressed: () {

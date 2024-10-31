@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pictionis/models/drawing_state.dart';
@@ -20,6 +19,7 @@ class FirebaseDrawController {
 
   StreamSubscription? _roomLocalSubscription;
   StreamSubscription? _clearSubscription;
+  StreamSubscription? _removeSubscription;
 
   FirebaseDrawController(
       {required this.instance,
@@ -55,6 +55,17 @@ class FirebaseDrawController {
       }
     });
 
+    _removeSubscription = drawingState.remove.listen(
+      (e) async {
+        final querySnapshot = await _drawEventsRef
+            .where("user", isEqualTo: e.user)
+            .where("timestamp", isEqualTo: e.timestamp)
+            .get();
+
+        _drawEventsRef.doc(querySnapshot.docs.first.id).delete();
+      },
+    );
+
     _clearSubscription = drawingState.clear.listen((_) {
       _drawEventsRef.get().then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
@@ -68,6 +79,7 @@ class FirebaseDrawController {
     _roomFirestoreSubscription?.cancel();
     _roomLocalSubscription?.cancel();
     _clearSubscription?.cancel();
+    _removeSubscription?.cancel();
   }
 }
 

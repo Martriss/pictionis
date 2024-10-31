@@ -16,7 +16,8 @@ class DrawingState {
 
   final StreamController<void> _remote = StreamController<void>.broadcast();
   final StreamController<void> _add = StreamController<void>.broadcast();
-  final StreamController<void> _remove = StreamController<void>.broadcast();
+  final StreamController<PaintEvent> _remove =
+      StreamController<PaintEvent>.broadcast();
   final StreamController<void> _clear = StreamController<void>.broadcast();
 
   Stream<void> get allChanges =>
@@ -24,7 +25,7 @@ class DrawingState {
 
   Stream<void> get remote => _remote.stream;
   Stream<void> get add => _add.stream;
-  Stream<void> get remove => _remove.stream;
+  Stream<PaintEvent> get remove => _remove.stream;
   Stream<void> get clear => _clear.stream;
 
   void addLocalPaintEvent(List<Offset?> offsets) {
@@ -51,14 +52,16 @@ class DrawingState {
   }
 
   void removeLastEvent() {
-    removeLocalEvent(
-        events.values.lastWhere((e) => e.user == Auth().currentUser!.uid));
+    final last = events.values
+        .where((e) => e.user == Auth().currentUser!.uid)
+        .lastOrNull;
+    if (last != null) removeLocalEvent(last);
   }
 
   void removeLocalEvent(PaintEvent event) {
     final key = '${event.timestamp}-${event.user}';
     _events.remove(key);
-    _remove.add(null);
+    _remove.add(event);
   }
 
   void removeFirebaseEvent(PaintEvent event) {
