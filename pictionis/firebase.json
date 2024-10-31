@@ -1,1 +1,42 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"pictionis-67a53","appId":"1:501644176308:android:d554a229c60ef9f00de0e1","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"pictionis-67a53","appId":"1:501644176308:ios:2f6ac61865bd00e10de0e1","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"pictionis-67a53","configurations":{"android":"1:501644176308:android:d554a229c60ef9f00de0e1","ios":"1:501644176308:ios:2f6ac61865bd00e10de0e1"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "pictionis-67a53",
+          "appId": "1:501644176308:android:d554a229c60ef9f00de0e1",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "pictionis-67a53",
+          "appId": "1:501644176308:ios:2f6ac61865bd00e10de0e1",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "pictionis-67a53",
+          "configurations": {
+            "android": "1:501644176308:android:d554a229c60ef9f00de0e1",
+            "ios": "1:501644176308:ios:2f6ac61865bd00e10de0e1",
+            "web": "1:501644176308:web:b5532beb96cd06090de0e1"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "frameworksBackend": {
+      "region": "europe-west1"
+    }
+  }
+}
