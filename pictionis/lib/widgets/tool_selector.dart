@@ -24,19 +24,21 @@ class ToolSelector extends StatelessWidget {
         color: Colors.white.withOpacity(0.9),
       ),
       children: [
+        // Stroke width
         FloatingActionButton.small(
           child: const Icon(Icons.line_weight),
           onPressed: () async {
             double? widthValue = await showDialog<double>(
                 context: context,
                 builder: (BuildContext context) => StrokeWidthDialog(
-                      curValue: _drawingState.currentPaint.strokeWidth,
+                      curValue: _drawingState.selectedPaint.strokeWidth,
                     ));
-            _drawingState.currentPaint.strokeWidth =
-                widthValue ?? _drawingState.currentPaint.strokeWidth;
+            _drawingState.selectedPaint.strokeWidth =
+                widthValue ?? _drawingState.selectedPaint.strokeWidth;
             _key.currentState?.toggle();
           },
         ),
+        //Color picker
         FloatingActionButton.small(
           onPressed: () async {
             await showDialog<void>(
@@ -44,9 +46,9 @@ class ToolSelector extends StatelessWidget {
               builder: (BuildContext context) {
                 return AlertDialog(
                   content: BlockPicker(
-                    pickerColor: _drawingState.currentPaint.color,
+                    pickerColor: _drawingState.selectedPaint.color,
                     onColorChanged: (color) {
-                      _drawingState.currentPaint.color = color;
+                      _drawingState.selectedPaint.color = color;
                       Navigator.of(context).pop();
                     },
                   ),
@@ -57,11 +59,13 @@ class ToolSelector extends StatelessWidget {
           },
           child: const Icon(Icons.palette),
         ),
+        // Shape selection
         const FloatingActionButton.small(
           backgroundColor: Colors.grey,
           onPressed: null,
           child: Icon(Icons.shape_line_outlined),
         ),
+        // Undo
         FloatingActionButton.small(
           onPressed: () {
             _drawingState.removeLastEvent();
@@ -69,11 +73,14 @@ class ToolSelector extends StatelessWidget {
           },
           child: const Icon(Icons.undo),
         ),
+        // Redo
         const FloatingActionButton.small(
           backgroundColor: Colors.grey,
           onPressed: null,
           child: Icon(Icons.redo),
         ),
+        // Reset
+        // TODO: confirm dialog
         FloatingActionButton.small(
           onPressed: () {
             _drawingState.clearPaintEvents();
