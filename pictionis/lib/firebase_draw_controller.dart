@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pictionis/models/drawing_state.dart';
@@ -19,35 +18,68 @@ class FirebaseDrawController {
   StreamSubscription? _roomFirestoreSubscription;
 
   StreamSubscription? _roomLocalSubscription;
+  StreamSubscription? _clearSubscription;
+  StreamSubscription? _removeSubscription;
 
   FirebaseDrawController(
       {required this.instance,
       required this.drawingState,
       required this.roomID}) {
-    _roomFirestoreSubscription = _drawEventsRef.snapshots().listen((snapshot) {
+    _roomFirestoreSubscription =
+        _drawEventsRef.orderBy("timestamp").snapshots().listen((snapshot) {
       if (snapshot.docChanges.isNotEmpty) {
         for (var docChange in snapshot.docChanges) {
           final data = docChange.doc.data();
           if (data != null) {
-            drawingState.addFirebasePaintEvent(PaintEvent.fromJson(data));
+            final event = PaintEvent.fromJson(data);
+            switch (docChange.type) {
+              case DocumentChangeType.added:
+                drawingState.addFirebasePaintEvent(event);
+                break;
+              case DocumentChangeType.removed:
+                drawingState.removeFirebaseEvent(event);
+                break;
+              case DocumentChangeType.modified:
+                // Should not happen
+                break;
+            }
           }
         }
       }
     });
 
-//TODO: Add user id to event
-    _roomLocalSubscription = drawingState.localChanges.listen((_) {
+    _roomLocalSubscription = drawingState.add.listen((_) {
       if (drawingState.events.isNotEmpty) {
-        final lastEvent = drawingState.events.last.toJson();
-        lastEvent['timestamp'] = FieldValue.serverTimestamp();
+        final lastEvent = drawingState.events.entries.last.value.toJson();
         _drawEventsRef.add(lastEvent);
       }
+    });
+
+    _removeSubscription = drawingState.remove.listen(
+      (e) async {
+        final querySnapshot = await _drawEventsRef
+            .where("user", isEqualTo: e.user)
+            .where("timestamp", isEqualTo: e.timestamp)
+            .get();
+
+        _drawEventsRef.doc(querySnapshot.docs.first.id).delete();
+      },
+    );
+
+    _clearSubscription = drawingState.clear.listen((_) {
+      _drawEventsRef.get().then((snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs) {
+          ds.reference.delete();
+        }
+      });
     });
   }
 
   void dispose() {
     _roomFirestoreSubscription?.cancel();
     _roomLocalSubscription?.cancel();
+    _clearSubscription?.cancel();
+    _removeSubscription?.cancel();
   }
 }
 
