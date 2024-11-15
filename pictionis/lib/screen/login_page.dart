@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pictionis/service/auth_service.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:pictionis/theme.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,19 +13,47 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final loginPage = true;
+  var loginPage = true;
 
   Widget _title() {
     var title = 'CONNEXION';
     if (!loginPage) title = 'INSCRIPTION';
     return Text(
       title,
-      style: GoogleFonts.luckiestGuy(
+      style:TextStyle(
+        fontFamily: 'LuckiestGuy',
         fontSize: 64,
         color: MyColors.colorDefault,
       ),
     );
   }
+
+  Widget _entryField(String title, TextEditingController controller) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: title,
+        border: const OutlineInputBorder(),
+      ),
+    );
+  }
+
+  Widget _secretField(String title, TextEditingController controller) {
+    return TextField(
+      controller: controller,
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: title,
+        border: const OutlineInputBorder(),
+      ),
+    );
+  }
+
+  SizedBox _padding(double height) {
+    return SizedBox(height: height,);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +61,8 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: Text(
           "Pictionis",
-          style: GoogleFonts.luckiestGuy(
-            fontSize: 24,
-            color: MyColors.darkColor,
-          )),
+          style: TextStyle(fontFamily: 'LuckiestGuy', color: MyColors.darkColor),
+          ),
         backgroundColor: MyColors.primaryColor,
       ),
       body: Center(
@@ -45,15 +71,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Form(
             child: Column(
               children: [
-                TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(hintText: "Email"),
-                ),
-                TextFormField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(hintText: "Mot de passe"),
-                ),
+                _title(),
+                _entryField('Email', emailController),
+                _padding(20),
+                _secretField('Mot de passe', passwordController),
+                _padding(10),
                 ElevatedButton(
                     onPressed: () {
                       if (emailController.text.isNotEmpty &&
@@ -73,7 +95,10 @@ class _LoginPageState extends State<LoginPage> {
                             password: passwordController.text);
                       }
                     },
-                    child: const Text("s'inscrire")),
+                    // style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(MyColors.secondaryColor)),
+                    child: const Text("s'inscrire")
+                    ),
+                OutlinedButton(onPressed: () {}, child: const Text('TESTTTTTTTTTT'),)
               ],
             ),
           ),
