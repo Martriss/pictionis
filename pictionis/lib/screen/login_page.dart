@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pictionis/service/auth_service.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pictionis/theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
       title,
       style: GoogleFonts.luckiestGuy(
         fontSize: 64,
-        // color: Color.black,
+        color: MyColors.colorDefault,
       ),
     );
   }
@@ -30,11 +31,13 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pictionis",
-            style: GoogleFonts.luckiestGuy(
-              fontSize: 24,
-              // color: Color.black,
-            )),
+        title: Text(
+          "Pictionis",
+          style: GoogleFonts.luckiestGuy(
+            fontSize: 24,
+            color: MyColors.darkColor,
+          )),
+        backgroundColor: MyColors.primaryColor,
       ),
       body: Center(
         child: Padding(
