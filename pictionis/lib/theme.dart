@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 class MyColors {
@@ -7,4 +9,14 @@ class MyColors {
   static const thirdColor = Color(0xFFCD8B76);
   static const darkColor = Color(0xFF7D387D);
   static const darkColor2 = Color(0xFF27474E);
+}
+
+TextStyle basicStyle({double fontSize = 16, Color color = MyColors.colorDefault, FontWeight fontWeight = FontWeight.normal, TextDecoration decoration = TextDecoration.none }) {
+  return TextStyle(
+    fontFamily: 'PTSans',
+    color: color,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    decoration: decoration
+  );
 }
