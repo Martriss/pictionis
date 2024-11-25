@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pictionis/screen/home_page.dart';
-import 'package:pictionis/screen/login_page.dart';
+import 'package:pictionis/screen/login_register_page.dart';
 import 'package:pictionis/service/auth_service.dart';
 
 class WidgetSelector extends StatefulWidget {
@@ -23,7 +23,7 @@ class _WidgetSelectorState extends State<WidgetSelector> {
             child: CircularProgressIndicator()
           );
         }
-        return const LoginPage();
+        return const LoginRegisterPage();
       },
     );
   }
