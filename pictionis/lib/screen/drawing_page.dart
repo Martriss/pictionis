@@ -55,6 +55,17 @@ class _DrawingPageState extends State<DrawingPage> {
         ),
         floatingActionButtonLocation: ExpandableFab.location,
         floatingActionButton: ToolSelector(drawingState: _drawingState),
+        bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Tapez ici...',
+            ),
+          )
+        ),
+      ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pictionis/screen/drawing_page.dart';
 import 'package:pictionis/service/auth_service.dart';
+import 'package:pictionis/theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +16,11 @@ class _HomePageState extends State<HomePage> {
     // Provisoire
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pictionis"),
+        title: Text(
+          "Pictionis",
+          style: TextStyle(fontFamily: 'LuckiestGuy', color: MyColors.darkColor),
+          ),
+        backgroundColor: MyColors.primaryColor,
         actions: [
           ElevatedButton(
             onPressed: () async {
