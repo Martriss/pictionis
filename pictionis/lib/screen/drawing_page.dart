@@ -6,6 +6,7 @@ import 'package:pictionis/firebase_draw_controller.dart';
 import 'package:pictionis/models/drawing_state.dart';
 import 'package:pictionis/widgets/draw_canvas.dart';
 import 'package:pictionis/widgets/draw_controller.dart';
+import 'package:pictionis/widgets/send_message.dart';
 import 'package:pictionis/widgets/tool_selector.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -55,17 +56,7 @@ class _DrawingPageState extends State<DrawingPage> {
         ),
         floatingActionButtonLocation: ExpandableFab.location,
         floatingActionButton: ToolSelector(drawingState: _drawingState),
-        bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Tapez ici...',
-            ),
-          )
-        ),
-      ),
+        bottomNavigationBar: SendMessage()
       ),
     );
   }
