@@ -16,6 +16,7 @@ class _SendMessage extends State<SendMessage> {
     if (_textFieldController.text.isEmpty) return; // No need to do something if textField is empty
   
     await MessageService().sendMessage(message: _textFieldController.text, roomID: "TEST");
+    _textFieldController.clear();
   }
 
   Widget _field(String hintText,TextEditingController controller) {
@@ -34,14 +35,38 @@ class _SendMessage extends State<SendMessage> {
     );
   }
 
+  Widget _button() {
+    return IconButton(
+      icon: const Icon(Icons.send),
+      onPressed: () {
+        _submitMessage(_textFieldController.text);
+      },
+      tooltip: 'Envoyer',
+      style: IconButton.styleFrom(
+        backgroundColor: MyColors.primaryColor,
+        shape: CircleBorder(),
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     FocusScope.of(context).requestFocus(FocusNode());
     return BottomAppBar(
-      color: Colors.grey[50],
+      // color: Colors.grey[50],
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: _field('Tapez ici...', _textFieldController)
+        padding: const EdgeInsets.all(6.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: _field('Tapez ici...', _textFieldController)
+            ),
+            const SizedBox(width: 4),
+            _button()
+          ],
+        )
+        
+        
       ),
     );
   }
