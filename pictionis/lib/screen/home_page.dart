@@ -15,22 +15,25 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // Provisoire
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Pictionis",
-          style: TextStyle(fontFamily: 'LuckiestGuy', color: MyColors.darkColor),
+        appBar: AppBar(
+          title: Text(
+            "Pictionis",
+            style:
+                TextStyle(fontFamily: 'LuckiestGuy', color: MyColors.darkColor),
           ),
-        backgroundColor: MyColors.primaryColor,
-        actions: [
-          ElevatedButton(
-            onPressed: () async {
-              await Auth().signOut();
-            },
-            child: const Text("se déconnecter")
-          )
-        ],
-      ),
-      body: const DrawingPage()
-    );
+          backgroundColor: MyColors.primaryColor,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 4.0),
+              child: IconButton(
+                icon: const Icon(Icons.logout),
+                onPressed: () async {
+                  await Auth().signOut();
+                },
+              ),
+            )
+          ],
+        ),
+        body: const DrawingPage());
   }
 }
