@@ -10,14 +10,17 @@ class MessageService {
 
   Future<void> sendMessage({
     required String message,
-    required String roomID
+    required String roomID,
   }) async {
     if (message == '') return; // No need to do something if empty
 
     final roomRef = FirebaseFirestore.instance.collection('rooms').doc(roomID);
     final docMessages = roomRef.collection('messages').doc();
 
-    final msg = MessageEvent(user: user?.uid ?? '', message: message);
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+    final msg = MessageEvent(
+        user: user?.uid ?? '', message: message, timestamp: timestamp);
     final json = msg.toJson();
 
     await docMessages.set(json);
