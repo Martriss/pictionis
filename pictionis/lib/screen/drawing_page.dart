@@ -51,13 +51,14 @@ class _DrawingPageState extends State<DrawingPage> {
     return Provider(
       create: (context) => _drawingState,
       child: Scaffold(
-        body: const DrawController(
-          child: DrawCanvas(),
-        ),
-        floatingActionButtonLocation: ExpandableFab.location,
-        floatingActionButton: ToolSelector(drawingState: _drawingState),
-        bottomNavigationBar: SendMessage()
-      ),
+          body: const DrawController(
+            child: DrawCanvas(),
+          ),
+          floatingActionButtonLocation: ExpandableFab.location,
+          floatingActionButton: ToolSelector(drawingState: _drawingState),
+          bottomNavigationBar: SendMessage(
+            roomID: "TEST",
+          )),
     );
   }
 }
