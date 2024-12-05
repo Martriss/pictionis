@@ -28,6 +28,7 @@ class ToolSelector extends StatelessWidget {
         children: [
           // Stroke width
           FloatingActionButton.small(
+            heroTag: "stroke_width_selector",
             child: const Icon(Icons.line_weight),
             onPressed: () async {
               double? widthValue = await showDialog<double>(
@@ -42,6 +43,7 @@ class ToolSelector extends StatelessWidget {
           ),
           //Color picker
           FloatingActionButton.small(
+            heroTag: "color_selector",
             onPressed: () async {
               await showDialog<void>(
                 context: context,
@@ -63,12 +65,14 @@ class ToolSelector extends StatelessWidget {
           ),
           // Shape selection
           const FloatingActionButton.small(
+            heroTag: "shape_selector",
             backgroundColor: Colors.grey,
             onPressed: null,
             child: Icon(Icons.shape_line_outlined),
           ),
           // Undo
           FloatingActionButton.small(
+            heroTag: "undo",
             onPressed: () {
               _drawingState.removeLastEvent();
               _key.currentState?.toggle();
@@ -77,6 +81,7 @@ class ToolSelector extends StatelessWidget {
           ),
           // Redo
           const FloatingActionButton.small(
+            heroTag: "redo",
             backgroundColor: Colors.grey,
             onPressed: null,
             child: Icon(Icons.redo),
@@ -84,6 +89,7 @@ class ToolSelector extends StatelessWidget {
           // Reset
           // TODO: confirm dialog
           FloatingActionButton.small(
+            heroTag: "reset",
             onPressed: () {
               _drawingState.clearPaintEvents();
               _key.currentState?.toggle();

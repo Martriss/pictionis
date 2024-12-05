@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pictionis/firebase_draw_controller.dart';
 import 'package:pictionis/models/drawing_state.dart';
+import 'package:pictionis/service/auth_service.dart';
+import 'package:pictionis/theme.dart';
 import 'package:pictionis/widgets/draw_canvas.dart';
 import 'package:pictionis/widgets/draw_controller.dart';
 import 'package:pictionis/widgets/message_overlay.dart';
@@ -53,6 +55,25 @@ class _DrawingPageState extends State<DrawingPage> {
     return Provider(
       create: (context) => _drawingState,
       child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              widget.roomID,
+              style: TextStyle(
+                  fontFamily: 'LuckiestGuy', color: MyColors.darkColor),
+            ),
+            backgroundColor: MyColors.primaryColor,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 4.0),
+                child: IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () async {
+                    await Auth().signOut();
+                  },
+                ),
+              )
+            ],
+          ),
           body: Stack(
             children: [
               const DrawController(
