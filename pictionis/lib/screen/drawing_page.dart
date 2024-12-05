@@ -4,14 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pictionis/firebase_draw_controller.dart';
 import 'package:pictionis/models/drawing_state.dart';
+import 'package:pictionis/service/auth_service.dart';
+import 'package:pictionis/theme.dart';
 import 'package:pictionis/widgets/draw_canvas.dart';
 import 'package:pictionis/widgets/draw_controller.dart';
+import 'package:pictionis/widgets/message_overlay.dart';
+import 'package:pictionis/widgets/send_message.dart';
 import 'package:pictionis/widgets/tool_selector.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
 class DrawingPage extends StatefulWidget {
-  const DrawingPage({super.key});
+  final String roomID;
+  const DrawingPage({super.key, required this.roomID});
 
   @override
   State<DrawingPage> createState() => _DrawingPageState();
@@ -33,7 +38,7 @@ class _DrawingPageState extends State<DrawingPage> {
       _firebaseDrawController = FirebaseDrawController(
         instance: firestore,
         drawingState: _drawingState,
-        roomID: "TEST",
+        roomID: widget.roomID,
       );
     }
   }
@@ -50,12 +55,41 @@ class _DrawingPageState extends State<DrawingPage> {
     return Provider(
       create: (context) => _drawingState,
       child: Scaffold(
-        body: const DrawController(
-          child: DrawCanvas(),
-        ),
-        floatingActionButtonLocation: ExpandableFab.location,
-        floatingActionButton: ToolSelector(drawingState: _drawingState),
-      ),
+          appBar: AppBar(
+            title: Text(
+              widget.roomID,
+              style: TextStyle(
+                  fontFamily: 'LuckiestGuy', color: MyColors.darkColor),
+            ),
+            backgroundColor: MyColors.primaryColor,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 4.0),
+                child: IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () async {
+                    await Auth().signOut();
+                  },
+                ),
+              )
+            ],
+          ),
+          body: Stack(
+            children: [
+              const DrawController(
+                child: DrawCanvas(),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: MessageOverlay(roomID: widget.roomID),
+              ),
+            ],
+          ),
+          floatingActionButtonLocation: ExpandableFab.location,
+          floatingActionButton: ToolSelector(drawingState: _drawingState),
+          bottomNavigationBar: SendMessage(
+            roomID: widget.roomID,
+          )),
     );
   }
 }
