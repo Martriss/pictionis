@@ -34,6 +34,8 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
-        body: const DrawingPage());
+        body: const DrawingPage(
+          roomID: "TEST",
+        ));
   }
 }
