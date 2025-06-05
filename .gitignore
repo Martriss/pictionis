@@ -48,6 +48,7 @@ app.*.map.json
 
 # Firebase
 .firebase/
+/lib/firebase_options.dart
 **/firebase-debug.log
 **/firestore-debug.log
 **/ui-debug.log
